@@ -1,0 +1,69 @@
+/* src/components/Cocina.css */
+
+.cocina-container {
+    padding: 20px;
+    background-color: #333;
+    color: white;
+    min-height: 100vh;
+}
+
+.cocina-titulo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.cocina-columnas {
+    display: flex;
+    gap: 20px;
+}
+
+.cocina-columna {
+    flex: 1;
+    background-color: #2c2c2c;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.cocina-columna h3 {
+    text-align: center;
+    border-bottom: 2px solid #555;
+    padding-bottom: 10px;
+}
+
+.comanda-card {
+    background-color: #444;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.comanda-card h4 {
+    margin-top: 0;
+}
+
+.comanda-items {
+    list-style: none;
+    padding: 0;
+}
+
+.comanda-acciones {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.comanda-acciones button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+}
+
+.btn-primary {
+    background-color: #007bff;
+}
+
+.btn-success {
+    background-color: #28a745;
+}
