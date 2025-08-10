@@ -8,9 +8,11 @@ namespace Restaurante.Api.Models
         public string PedidoId { get; set; }
         public string NombreCliente { get; set; }
         public string TelefonoCliente { get; set; }
+        public string Estado { get; set; } = "En Proceso";
         public List<ItemPedido> Items { get; set; }
         public string TipoPedido { get; set; }
         public DateTime FechaHora { get; set; }
+        
     }
 
     public class ItemPedido

@@ -1,3 +1,4 @@
+
 // src/components/Cocina.jsx (modificación completa)
 import React, { useState, useEffect } from 'react'; // Agregamos useEffect
 import axios from 'axios'; // Necesitamos Axios para la petición
@@ -24,13 +25,46 @@ const Cocina = () => {
         fetchPedidos();
     }, []); // El array vacío asegura que se ejecuta solo una vez al cargar el componente
 
-    const moverPedido = (id, nuevoEstado) => {
+    // src/components/Cocina.jsx (modificación de la función moverPedido)
+
+// URL base de la API, asegúrate de que sea la correcta
+const API_URL = 'http://localhost:5062/api/Pedidos'; 
+
+// Función para actualizar solo el estado del pedido (requiere endpoint específico en el backend)
+const actualizarEstadoPedido = async (id, nuevoEstado) => {
+    try {
+        // El backend espera un string plano, no un objeto
+        await axios.put(
+            `${API_URL}/actualizar-estado/${id}`,
+            JSON.stringify(nuevoEstado),
+            { headers: { 'Content-Type': 'application/json' } }
+        );
         setPedidos(prevPedidos =>
-            prevPedidos.map(pedido =>
-                pedido.id === id ? { ...pedido, estado: nuevoEstado } : pedido
+            prevPedidos.map(p =>
+                p.pedidoId === id ? { ...p, estado: nuevoEstado } : p
             )
         );
-    };
+    } catch (error) {
+        if (error.response) {
+            console.error('Respuesta del backend:', error.response.data);
+        }
+        console.error('Error al actualizar solo el estado del pedido:', error);
+    }
+};
+
+const actualizarPedido = async (id, nuevoEstado) => {
+    try {
+        await axios.put(`${API_URL}/actualizar/${id}`, { estado: nuevoEstado }); // <-- Cambiar a minúsculas
+
+        setPedidos(prevPedidos =>
+            prevPedidos.map(pedido =>
+                pedido.pedidoId === id ? { ...pedido, estado: nuevoEstado } : pedido
+            )
+        );
+    } catch (error) {
+        console.error('Error al actualizar el estado del pedido:', error);
+    }
+};
 
     const renderPedidos = (estado) => (
         pedidos
@@ -46,10 +80,13 @@ const Cocina = () => {
                     </ul>
                     <div className="comanda-acciones">
                         {estado === 'En Proceso' && (
-                            <button className="btn-primary" onClick={() => moverPedido(pedido.pedidoId, 'Terminado')}>Terminado</button>
+                            <>
+                                <button className="btn-primary" onClick={() => actualizarEstadoPedido(pedido.pedidoId, 'Terminado')}>Terminado</button>
+                                
+                            </>
                         )}
                         {estado === 'Terminado' && (
-                            <button className="btn-success" onClick={() => moverPedido(pedido.pedidoId, 'Entregado')}>Entregado</button>
+                            <button className="btn-success" onClick={() => actualizarEstadoPedido(pedido.pedidoId, 'Entregado')}>Entregado</button>
                         )}
                     </div>
                 </div>
