@@ -1,38 +1,57 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
-using Restaurante.Api.Models; // Importa el namespace para usar los modelos
+using System.Threading.Tasks; // Necesario para Task
+using Restaurante.Api.Models;
+using Restaurante.Api.Data;
+using Microsoft.EntityFrameworkCore; // Importa el namespace del contexto
 
 [ApiController]
 [Route("api/[controller]")]
 public class PedidosController : ControllerBase
 {
-    // Endpoint para recibir un nuevo pedido
-    [HttpPost("crear")]
-    public IActionResult CrearPedido([FromBody] Pedido pedido)
+    private readonly RestauranteContext _context;
+
+    public PedidosController(RestauranteContext context)
     {
-        // Validar que el objeto del pedido no sea nulo
+        _context = context;
+    }
+    // Endpoint para recibir un nuevo pedido
+    // Restaurante.Api/Controllers/PedidosController.cs (modificación)
+
+    [HttpPost("crear")]
+    public async Task<IActionResult> CrearPedido([FromBody] Pedido pedido)
+    {
         if (pedido == null)
         {
             return BadRequest("El objeto del pedido es nulo.");
         }
 
-        // Aquí es donde se agregará la lógica de negocio en el futuro:
-        // 1. Guardar el pedido en una base de datos.
-        // 2. Calcular el costo total.
-        // 3. Notificar a la interfaz de cocina.
-
-        // Por ahora, solo simularemos la recepción e imprimiremos en la consola
-        Console.WriteLine($"--- Nuevo Pedido Recibido ---");
-        Console.WriteLine($"ID del Pedido: {pedido.PedidoId}");
-        Console.WriteLine($"Cliente: {pedido.NombreCliente} ({pedido.TelefonoCliente})");
-        Console.WriteLine($"Items:");
-        foreach (var item in pedido.Items)
+        try
         {
-            Console.WriteLine($"- {item.NombreProducto} x{item.Cantidad}");
-        }
-        Console.WriteLine("-----------------------------");
+            // Agregamos el pedido al contexto
+            _context.Pedidos.Add(pedido);
 
-        // Devolvemos una respuesta exitosa con un mensaje
-        return Ok(new { mensaje = "Pedido recibido correctamente", pedidoId = pedido.PedidoId });
+            // Guardamos los cambios de forma asíncrona en la base de datos
+            await _context.SaveChangesAsync();
+
+            // Devolvemos una respuesta exitosa
+            return Ok(new { mensaje = "Pedido recibido y guardado correctamente", pedidoId = pedido.PedidoId });
+        }
+        catch (Exception ex)
+        {
+            // En caso de error, devolvemos una respuesta 500
+            return StatusCode(500, $"Ocurrió un error al guardar el pedido: {ex.Message}");
+        }
     }
+
+// Restaurante.Api/Controllers/PedidosController.cs
+
+[HttpGet("pedidos")]
+public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidos()
+{
+    // Con la inyección de dependencias, el contexto ya está listo para usarse.
+    return await _context.Pedidos
+        .Include(p => p.Items) // Esto es crucial para traer los items del pedido.
+        .ToListAsync();
+}
 }
