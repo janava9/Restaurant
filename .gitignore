@@ -1,0 +1,10 @@
+# Visual Studio Code
+.vscode/
+
+# Build Folders
+**/bin/
+**/obj/
+
+# Node
+node_modules/
+dist/
