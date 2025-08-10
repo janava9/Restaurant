@@ -28,7 +28,8 @@ const Cocina = () => {
     // src/components/Cocina.jsx (modificación de la función moverPedido)
 
 // URL base de la API, asegúrate de que sea la correcta
-const API_URL = 'http://localhost:5062/api/Pedidos'; 
+//const API_URL = 'http://localhost:5062/api/Pedidos'; 
+const API_URL = 'restaurante-api-demo-cwhegccpc6ffcjds.canadacentral-01.azurewebsites.net/api/Pedidos'; 
 
 // Función para actualizar solo el estado del pedido (requiere endpoint específico en el backend)
 const actualizarEstadoPedido = async (id, nuevoEstado) => {
@@ -82,7 +83,7 @@ const actualizarPedido = async (id, nuevoEstado) => {
                         {estado === 'En Proceso' && (
                             <>
                                 <button className="btn-primary" onClick={() => actualizarEstadoPedido(pedido.pedidoId, 'Terminado')}>Terminado</button>
-                                
+
                             </>
                         )}
                         {estado === 'Terminado' && (
