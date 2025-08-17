@@ -7,8 +7,10 @@ import axios from 'axios';
 import '../index.css'; // Asegúrate de que los estilos globales estén importados
 
 // Asegúrate de que esta URL sea la correcta para tu API
-//const API_URL = 'http://localhost:5062/api/Pedidos/crear'; 
-const API_URL = 'https://restaurante-api-demo-cwhegccpc6ffcjds.canadacentral-01.azurewebsites.net/api/Pedidos/crear'; 
+// Para desarrollo local
+const API_URL = 'http://localhost:5062/api/Pedidos/crear'; 
+//url de producción
+//const API_URL = 'https://restaurante-api-demo-cwhegccpc6ffcjds.canadacentral-01.azurewebsites.net/api/Pedidos/crear'; 
 function Pos() {
   const [order, setOrder] = useState([]);
   const [orderId, setOrderId] = useState(null);
